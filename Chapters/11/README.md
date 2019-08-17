@@ -2327,7 +2327,7 @@ internal class Foo : IComparable {
 
 The signature of **IComparable**'s **CompareTo** indicates that it has a parameter of type Object. But I am overriding it here with replacing **Object** with **dynamic**. Also the **Equals** method is defined by **Object** to take a reference of type **Object**. But I have overridden it so that takes **dynamic** instead of **Object**. In this way, when using the argument inside **CompareTo** and **Equals** , the compiler will emit code that performs late binding. This could be useful when building types that needs to interoperate with DLR-based languages. We can still work with the same familiar methods and interfaces while supporting interoperability.
 
-### 11.6.4 Things That Can't be Done Dynamic Typing
+### 11.6.4 Restrictions on the Usage of dynamic
 
 I mentioned that the **dynamic** type is a compile-time, meaning that it does not exist at run-time. I have also said that the **dynamic** type is a type and can be used almost anywhere any other type can be used. In the following few sections, I will discuss where the **dynamic** type cannot be used.
 
