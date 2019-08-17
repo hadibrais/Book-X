@@ -581,7 +581,7 @@ We can solve this problem by using the Visitor design pattern. The essence of th
 
 An expression object may be a root of an expression tree that consists of many levels of various expression objects. If we want to visit the root of this tree, then we need to check for the value **NodeType** and then call the corresponding specific method of **ExpressionVisitor**. But this is not practical since there are many node types. For this reason, this is a general method called **Visit** that we can use for all expressions. The following code shows how this method is implemented:
 
-![Figure 11.2](Fig2.PNG)  
+![Figure 11.2](Fig2_fix.PNG)  
 Figure 11.2: The Visitor pattern implementation in DLR Expression. The solid lines reflect inheritance relationship between types. The dashed lines reflect a message to the defining type.
 
 ```
