@@ -2375,10 +2375,10 @@ Just as with the previous case, it does not make much sense to extend the **dyna
 
 ## Addition Information
 
-DLR source code: https://archive.codeplex.com/?p=dlr.
-Wu, Chaur. Pro DLR in .NET 4. Apress, 2011.
-Quiroga Álvarez, José. "Optimizing Runtime Performance of Dynamically Typed Code." (2016).
-Quiroga, Jose, and Francisco Ortin. "SSA transformations to facilitate type inference in dynamically typed code." The Computer Journal 60.9 (2017): 1300-1315.
+DLR source code: https://archive.codeplex.com/?p=dlr.  
+Wu, Chaur. Pro DLR in .NET 4. Apress, 2011.  
+Quiroga Álvarez, José. "Optimizing Runtime Performance of Dynamically Typed Code." (2016).  
+Quiroga, Jose, and Francisco Ortin. "SSA transformations to facilitate type inference in dynamically typed code." The Computer Journal 60.9 (2017): 1300-1315.  
 
 
 
