@@ -13,7 +13,7 @@ Object obj = GetObject();
 Int32 integer = obj;
 ```
 
-**GetObject** is method that may be defined by you or by someone else. This method could contain any code that possibly involves various statements such as loops, if-else, and other method calls. At compile-time, the compiler does not know what type of object **GetObject** will return. All it knows that **obj** is a reference of type **Object** that identifies to the returned object. The returned object could be an instance of any **Object** -derived type. It could be an **Int32** or a **String** or something that we never heard of. The compiler also knows that **integer** is of type **Int32**. Now when the compiler performs type checking on this code, it will see that we are attempting to assign an **Object** to an **Int32**. If the compiler can determine that **obj** references a boxed **Int32** all the time, then it can emit code that unboxes and copies this value to **interger**. However, since the compiler may not have enough information to make this guarantee, it determines that this is not safe and so it will emit the following error: **"Cannot implicitly convert type 'object' to 'int'. An explicit conversion exists (are you missing a cast?)"**. The compiler is telling us that it cannot guarantee that this conversion will succeed at run-time, and we have to use casting as follows:
+**GetObject** is a method that may be defined by you or by someone else. This method could contain any code that possibly involves various statements such as loops, if-else, and other method calls. At compile-time, the compiler does not know what type of object **GetObject** will return. All it knows is that **obj** is a reference of type **Object** that identifies to the returned object. The returned object could be an instance of any **Object** -derived type. It could be an **Int32** or a **String** or something that we never heard of. The compiler also knows that **integer** is of type **Int32**. Now when the compiler performs type checking on this code, it will see that we are attempting to assign an **Object** to an **Int32**. If the compiler can determine that **obj** references a boxed **Int32** all the time, then it can emit code that unboxes and copies this value to **interger**. However, since the compiler may not have enough information to make this guarantee, it determines that this is not safe and so it will emit the following error: **"Cannot implicitly convert type 'object' to 'int'. An explicit conversion exists (are you missing a cast?)"**. The compiler is telling us that it cannot guarantee that this conversion will succeed at run-time, and we have to use casting as follows:
 
 ```
 Int32 integer = (Int32)obj;
@@ -43,7 +43,7 @@ A programming language being a static or dynamic is a matter of degree. This deg
 ```
 Object obj = GetObject();
 MethodInfo mi = obj.GetType().GetMethod("Run");
-Object[] args = newObject[] { "String", 4 };
+Object[] args = new Object[] { "String", 4 };
 mi.Invoke(obj, args);
 ```
 
@@ -140,7 +140,7 @@ using Microsoft.Office.Interop.Excel;
 
 internal static class Program {
     private static void Main() {
-        Application excel = newApplication();
+        Application excel = new Application();
         excel.Visible = true;
         excel.Workbooks.Add();
 
@@ -171,7 +171,7 @@ internal static class Program {
         // Without using dynamic.
         Int32 value = 5;
         if (value >= 0) {
-            String str= Method(newInt32[value]);
+            String str= Method(new Int32[value]);
             Console.WriteLine(str + str);
         }
 
@@ -182,7 +182,7 @@ internal static class Program {
 
         // With dynamic.
         dynamic value2 = 5;
-        dynamic result2 = (value2 >= 0) ? newInt32[value2] : value2;
+        dynamic result2 = (value2 >= 0) ? new Int32[value2] : value2;
         value2 = Method(result2);
         Console.WriteLine(value2 + value2);
     }
@@ -231,7 +231,7 @@ using System.Dynamic;
 internal static class Program {
     private static void Main() {
         // Must be dynamically typed.
-        dynamic expando = newExpandoObject();
+        dynamic expando = new ExpandoObject();
 
         expando.StudentName = "Bob"; // A new field of type String.
         expando.PhoneNumber = 53652282; // A new field of type Int32.
@@ -242,7 +242,7 @@ internal static class Program {
         Console.WriteLine(expando); // System.Dynamic.ExpandoObject.
 
         // A new field of type Func<String>.
-        expando.ToString = newFunc<String>(() => ExpandoToString(expando));
+        expando.ToString = new Func<String>(() => ExpandoToString(expando));
 
         // So what do you think about these?
         Console.WriteLine(expando.ToString()); // Bob 53652282 (89.5, 71)
@@ -285,7 +285,7 @@ Console.WriteLine(assignExpr); // (result = (4 + 7))
 
 // Compile & Execute.
 BlockExpression blockExpr =
-    Expression.Block( newParameterExpression[]{ resultExpr}, assignExpr);
+    Expression.Block( new ParameterExpression[]{ resultExpr}, assignExpr);
 Expression<Func<Int32>> lambdaExpr = Expression.Lambda<Func<Int32>>(blockExpr);
 Func<Int32> add = lambdaExpr.Compile(); // Compile to a delegate
 Console.WriteLine(add()); // Print the result.
@@ -304,7 +304,7 @@ internal static class Program {
     private static void Main() {
         Int32[] array = GetArray();
         if (array.Length > 0) {
-            Action<Int32[]> print = newAction<Int32[]>(PrintArray);
+            Action<Int32[]> print = new Action<Int32[]>(PrintArray);
             print(array);
         }
         else
@@ -341,7 +341,7 @@ private static void Main() {
 
     // When Length is positive, call PrintArray to print the array.
     MethodCallExpression printArrayExpr = Expression.Call(null,
-        typeof(Program).GetMethod("PrintArray", newType[] { typeof(Int32[]) }),
+        typeof(Program).GetMethod("PrintArray", new Type[] { typeof(Int32[]) }),
         arrayExpr);
 
     // An expression that represents a delegate object of type Action<Int32[]>>.
@@ -353,12 +353,12 @@ private static void Main() {
 
     // When Length is not posisitive, just print "Array is empty.".
     MethodCallExpression thenExpr = Expression.Call(null,
-        typeof(Console).GetMethod("WriteLine", newType[] { typeof(String) }),
+        typeof(Console).GetMethod("WriteLine", new Type[] { typeof(String) }),
         Expression.Constant("Array is empty."));
 
     // This is the top level node that represents the whole program.
     BlockExpression topExpr = Expression.Block(
-        newParameterExpression[] { arrayExpr }, assignmentExpr,
+        new ParameterExpression[] { arrayExpr }, assignmentExpr,
         Expression.IfThenElse(Expression.LessThanOrEqual(arrayLength,
         Expression.Constant(0)), thenExpr, elseExpr));
 
@@ -398,7 +398,7 @@ public static void PrintArray(Int32[] array) {
 
     // An expression that prints an element of an array.
     MethodCallExpression printExpr = Expression.Call(null,
-        typeof(Console).GetMethod("WriteLine", newType[] { typeof(Int32) }),
+        typeof(Console).GetMethod("WriteLine", new Type[] { typeof(Int32) }),
         Expression.ArrayAccess(arrayExpr, indexExpr));
 
     // Initialize the loop to 0.
@@ -409,7 +409,7 @@ public static void PrintArray(Int32[] array) {
     LabelExpression label = Expression.Label(labelTarget);
 
     // This expression represents the whole loop.
-    BlockExpression topExpr = Expression.Block(newParameterExpression[] { indexExpr },
+    BlockExpression topExpr = Expression.Block(new ParameterExpression[] { indexExpr },
         assignExpr, Expression.Loop(
         Expression.IfThenElse(
         Expression.LessThan(indexExpr, Expression.ArrayLength(arrayExpr)),
@@ -471,9 +471,9 @@ private static void PrintExpressions(IEnumerable<Expression> exprs) {
 
         elseif (ce != null) {
             Console.WriteLine("If " + ce.Test);
-            PrintExpressions(newExpression[] { ce.IfTrue });
+            PrintExpressions(new Expression[] { ce.IfTrue });
             Console.WriteLine("Else");
-            PrintExpressions(newExpression[] { ce.IfFalse });
+            PrintExpressions(new Expression[] { ce.IfFalse });
         }
 
         else if (le != null) PrintExpressions(new Expression[] { le.Body });
@@ -518,7 +518,7 @@ using System.Linq.Expressions; // Expression and ExpressionType.
 
 internal static class Program {
     private static void Main() {
-        ReadFileExpression rfExpr = newReadFileExpression("profile.txt");
+        ReadFileExpression rfExpr = new ReadFileExpression("profile.txt");
         Func<String> readFile = Expression.Lambda<Func<String>>(rfExpr).Compile();
         Console.WriteLine(readFile());
     }
@@ -528,7 +528,7 @@ internal class ReadFileExpression : Expression {
     private String m_fileName;
     private Encoding m_fileEncoding;
     private static MethodInfo s_readText = typeof(File).GetMethod("ReadAllText",
-        newType[] { typeof(String), typeof(Encoding) });
+        new Type[] { typeof(String), typeof(Encoding) });
 
     public ReadFileExpression(String fileName) : this(fileName, Encoding.UTF8) { }
 
@@ -586,7 +586,7 @@ Figure 11.2: The Visitor pattern implementation in DLR Expression. The solid lin
 
 ```
 public virtual Expression Visit(Expression node) {
-    if (node == null) { returnnull; }
+    if (node == null) { return null; }
     else { return node.Accept(this); }
 }
 ```
@@ -629,7 +629,7 @@ The default implementation will first reduce the current expression object and t
 ```
 internal static class Program {
     private static void Main() {
-        ReadFileExpression rfExpr = newR eadFileExpression("profile.txt");
+        ReadFileExpression rfExpr = new ReadFileExpression("profile.txt");
         ReadFileExpressionVisitor visitor = new ReadFileExpressionVisitor();
         ReadFileExpression rfNewExpr = (ReadFileExpression)visitor.Visit(rfExpr);
         Func<Object> readFile = Expression.Lambda<Func<Object>>(rfNewExpr).Compile();
@@ -642,7 +642,7 @@ internal class ReadFileExpressionVisitor : ExpressionVisitor {
         ReadFileExpression rfExpr = node asReadFileExpression;
 
         if (rfExpr == null)
-            returnbase.VisitExtension(node);
+            return base.VisitExtension(node);
 
         return new ReadFileExpression(rfExpr.FileName, rfExpr.FileEncoding);
     }
@@ -661,7 +661,7 @@ internal class ReadFileExpression2 : Expression {
     privateConstantExpression m_fileNameExpr;
     privateEncoding m_fileEncoding;
     private static MethodInfo s_readText = typeof(File).GetMethod("ReadAllText",
-        newType[] { typeof(String), typeof(Encoding) });
+        new Type[] { typeof(String), typeof(Encoding) });
 
     public ReadFileExpression2(String fileName) : this(fileName, Encoding.UTF8) { }
 
@@ -786,7 +786,7 @@ In the first line of code, the C# compiler will automatically translate the lamb
 ```
 ParameterExpression parameterExpression = Expression.Parameter(typeof(Int32), "left");
 ParameterExpression parameterExpression1 = Expression.Parameter(typeof(Int32), "right");
-ParameterExpression[] parameterExpressionArray = newParameterExpression[2];
+ParameterExpression[] parameterExpressionArray = new ParameterExpression[2];
 parameterExpressionArray[0] = parameterExpression;
 parameterExpressionArray[1] = parameterExpression1;
 Expression<Func<Int32,Int32,Int32>> addExpr = Expression.Lambda<Func<Int32,Int32,Int32>>(
@@ -959,7 +959,7 @@ internal class BinaryPlusBinder2 : CallSiteBinder {
     private static Type stringType = typeof(String);
 
     private static MethodInfo concatMethodInfo = stringType.GetMethod("Concat",
-        newType[] { stringType, stringType });
+        new Type[] { stringType, stringType });
 
     public override Expression Bind(Object[] args,
         ReadOnlyCollection<ParameterExpression> parameters,
@@ -1037,7 +1037,7 @@ internal class BinaryPlusBinder3 : CallSiteBinder {
     private static Type stringType = typeof(String);
 
     private static MethodInfo concatMethodInfo = stringType.GetMethod("Concat",
-        newType[] { stringType, stringType });
+        new Type[] { stringType, stringType });
 
     public override Expression Bind(Object[] args,
         ReadOnlyCollection<ParameterExpression> parameters,
@@ -1090,7 +1090,7 @@ internal class BinaryPlusBinder4 : CallSiteBinder {
     private static Type int32Type = typeof(Int32);
     private static Type stringType = typeof(String);
     private static MethodInfo concatMethodInfo = stringType.GetMethod("Concat",
-        newType[] { stringType, stringType });
+        new Type[] { stringType, stringType });
 
     public override Expression Bind(Object[] args,
         ReadOnlyCollection<ParameterExpression> parameters, LabelTarget returnLabel) {
@@ -1189,7 +1189,7 @@ ParameterExpression pe0 = Expression.Parameter(typeof(Object), "$arg0");
 ParameterExpression pe1 = Expression.Parameter(typeof(Object), "$arg1");
 ParameterExpression[] temp = new[] { pe0, pe1 };
 ReadOnlyCollection<ParameterExpression> parameters =
-    newReadOnlyCollection<ParameterExpression>(temp);
+    new ReadOnlyCollection<ParameterExpression>(temp);
 
 // Constructing returnLabel;
 LabelTarget returnLabel = Expression.Label(typeof(Object));
@@ -1285,7 +1285,7 @@ private static Object ExecuteStitch(CallSite site, Object arg0, Object arg1) {
     // This means L0 cache miss has occurred.
     Boolean old_match = site._match;
     Boolean site._match = false; // Not matched.
-    if (old_match) returndefault(Object); // This returns null.
+    if (old_match) return default(Object); // This returns null.
     else return site.Update(site, arg0, arg1);
 }
 ```
@@ -1350,7 +1350,7 @@ using System.Runtime.CompilerServices;
 
 internal static class Program {
     private static void Main() {
-        BinaryPlusBinder5 binder = newBinaryPlusBinder5();
+        BinaryPlusBinder5 binder = new BinaryPlusBinder5();
         CallSite<Func<CallSite, Object, Object, Object>> site =
             CallSite<Func<CallSite, Object, Object, Object>>.Create(binder);
         Int32 leftOperand = 5, rightOperand = 2;
@@ -1366,7 +1366,7 @@ internal class BinaryPlusBinder5 : CallSiteBinder {
     private static Type int32Type = typeof(Int32);
     private static Type stringType = typeof(String);
     private static MethodInfo concatMethodInfo = stringType.GetMethod("Concat",
-        newType[] { stringType, stringType });
+        new Type[] { stringType, stringType });
 
     public override Expression Bind(Object[] args,
         ReadOnlyCollection<ParameterExpression> parameters, LabelTarget returnLabel) {
@@ -1436,7 +1436,7 @@ using Microsoft.Scripting.Hosting;
 
 internal static class Program {
     private static void Main() {
-        dynamic csObject1 = newPoint() { X = 1, Y = 1 }; // Static object.
+        dynamic csObject1 = new Point() { X = 1, Y = 1 }; // Static object.
         dynamic csObject2 = GetStaticObjectFromCS(); // Static object.
         dynamic rubyObject = GetDynamicObjectFromIronRuby(); // Dynamic object.
         Console.WriteLine("csObject1 is {0}{3}csObject2 is {1}{3}rubyObject is {2}",
@@ -1522,7 +1522,7 @@ using System.Runtime.CompilerServices;
 internal static class Program {
     private static void Main() {
         // Create a canonical binder.
-        BinaryPlusBinder6 binder = newBinaryPlusBinder6();
+        BinaryPlusBinder6 binder = new BinaryPlusBinder6();
 
         // Create a call site for addition of two Int32 values.
         CallSite<Func<CallSite, Int32, Int32, Object>> site1 =
@@ -1549,7 +1549,7 @@ internal class BinaryPlusBinder6 : BinaryOperationBinder {
     private static Type int32Type = typeof(Int32);
     private static Type stringType = typeof(String);
     private static MethodInfo concatMethodInfo = stringType.GetMethod("Concat",
-        newType[] { stringType, stringType });
+        new Type[] { stringType, stringType });
 
     // Only allows addition operations.
     public BinaryPlusBinder6() : base(ExpressionType.Add) { }
@@ -1602,7 +1602,7 @@ In this section, I will discuss how binders of different languages interoperate 
 The code below executes the dynamic operation that involves adding two **Int32** values. The delegate type is **Func<CallSite,Int32,Int32,Object>** which is suitable for the binding logic of **BinaryPlusBinder6**. When the delegate object referred by **Target** is invoked, the DLR will check whether any of the caches L0, L1, and L2 has the required rule. But since this is the first time the binder object and the call site object are used then all caches are empty. This means that the **Bind** method will be called to perform the late binding.
 
 ```
-BinaryPlusBinder6 binder = newBinaryPlusBinder6();
+BinaryPlusBinder6 binder = new BinaryPlusBinder6();
 CallSite<Func<CallSite, Int32, Int32, Object>> site1 =
     CallSite<Func<CallSite, Int32, Int32, Object>>.Create(binder);
 Int32 result1 = (Int32)site1.Target(site1, 5, 2);
@@ -1697,7 +1697,7 @@ public abstract class DynamicMetaObjectBinder : CallSiteBinder {
     // Used to detect standard MetaObjectBinders.
     // It is internal so that only DLR's standard binders can override it to return true.
     // All other binders will inherit this property which will return always false.
-    internal virtual bool IsStandardBinder { get { returnfalse; } }
+    internal virtual bool IsStandardBinder { get { return false; } }
 
     // When overridden in the derived class, performs the binding of the dynamic operation.
     // This method is overridden by BinaryOperationBinder and all other standard binders.
@@ -1810,7 +1810,7 @@ Because **ExpandoObject** implements **IDynamicMetaObjectProvider** , I will sho
 // Represents a dynamic object that is expandable.
 internal sealed class MiniExpandoObject : IDynamicMetaObjectProvider {
     // Each expandable object has its own set of elements.
-    internal Dictionary<String, Object> variables = newDictionary<String, Object>();
+    internal Dictionary<String, Object> variables = new Dictionary<String, Object>();
 
     // Get the meta-object which carry late-binding logic.
     public DynamicMetaObject GetMetaObject(Expression parameter) {
@@ -1899,7 +1899,7 @@ public class DynamicMetaObject {
     }
 
     public virtual IEnumerable<String> GetDynamicMemberNames() {
-        return newstring[0];
+        return new string[0];
     }
 }
 ```
@@ -2004,7 +2004,7 @@ The definition of **MiniExpandoMetaObject** is now completed. Instances of **Min
 
 ```
 private static void Main() {
-    dynamic dynamicSet = newMiniExpandoObject();
+    dynamic dynamicSet = new MiniExpandoObject();
 
     // These actions are late-bound by our meta-object.
     dynamicSet.A = 10; // SetMember.
@@ -2074,7 +2074,7 @@ I will discuss the details of this late binding shortly. The important thing now
 internal sealed class MiniExpandoObject2 : DynamicObject {
 
     // Each expandable object has its own set of elements.
-    internalDictionary<String, Object> variables = newDictionary<String, Object>();
+    internalDictionary<String, Object> variables = new Dictionary<String, Object>();
 
     public override bool TryGetMember(GetMemberBinder binder, outobject result) {
         Console.WriteLine("Binding GetMember '{0}'.", binder.Name);
@@ -2099,7 +2099,7 @@ internal sealed class MiniExpandoObject2 : DynamicObject {
 The code overrides only two virtual methods, **TryGetMember** and **TrySetMember** because this all we are interested in. The code we need to write in these methods looks very natural to any developer because there are no expression trees or dynamic objects. **DynamicObject** is an abstract version of **DynamicMetaObject** that removes the details of the DLR and let us focus on the actual late binding process. The following uses **MiniExpandoObject2** to set and get members:
 
 ```
-dynamic dynamicSet = newMiniExpandoObject2();
+dynamic dynamicSet = new MiniExpandoObject2();
 dynamicSet.A = 10; // BindSetMember of MetaDynamic calls our code.
 Console.WriteLine("dynamicSet.A = {0}", dynamicSet.A);
 
@@ -2175,7 +2175,7 @@ internal static class Program {
         }
 
         if (<Main>o__SiteContainer0.<>p__Site2 == null) {
-            cSharpArgumentInfoArray = newCSharpArgumentInfo[2];
+            cSharpArgumentInfoArray = new CSharpArgumentInfo[2];
             cSharpArgumentInfoArray[0] =
                 CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.None, null);
             cSharpArgumentInfoArray[1] =
@@ -2196,7 +2196,7 @@ internal static class Program {
         }
 
         if (<Main>o__SiteContainer0.<>p__Site4 == null) {
-            cSharpArgumentInfoArray = newCSharpArgumentInfo[2];
+            cSharpArgumentInfoArray = new CSharpArgumentInfo[2];
             cSharpArgumentInfoArray[0] = CSharpArgumentInfo.Create(
                 CSharpArgumentInfoFlags.UseCompileTimeType, null);
 
@@ -2273,8 +2273,8 @@ public class Program {
         Double @double = 10.2;
         String @string = "Stuff";
         DateTime dateTime = DateTime.Now;
-        Object @object = newObject();
-        Program program = newProgram();
+        Object @object = new Object();
+        Program program = new Program();
         dynamic dynamic = 3.0m;
 
         Add(int32, @string); // Early bound to 1.
