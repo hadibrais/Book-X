@@ -2349,23 +2349,23 @@ Another case where you cannot use the **dynamic** type is when implementing gene
 internal class Foo : IComparable<dynamic> { }
 ```
 
-The compiler will emit the following error: " **'Foo': cannot implement a dynamic interface 'System.IComparable<dynamic>'** ". There are two reasons for this. First, **DynamicAttribute** cannot be applied to type arguments (but it can be applied to type parameters). So it's not possible to differentiate between implementing **IComparable<dynamic>** and **IComparable<Object>** . The second reason is that it's not useful. That's because you can still implement the interface while casting generic parameters to **dynamic** whenever you want to perform a dynamic operation. You can also have references of type **IComparable<dynamic>** .
+The compiler will emit the following error: "**'Foo': cannot implement a dynamic interface 'System.IComparable\<dynamic\>'**". There are two reasons for this. First, **DynamicAttribute** cannot be applied to type arguments (but it can be applied to type parameters). So it's not possible to differentiate between implementing **IComparable\<dynamic\>** and **IComparable\<Object\>**. The second reason is that it's not useful. That's because you can still implement the interface while casting generic parameters to **dynamic** whenever you want to perform a dynamic operation. You can also have references of type **IComparable\<dynamic\>**.
 
-By the way, although you cannot implement dynamic interfaces, you can derive from generic types and specify one or more of the generic parameters to be **dynamic** . The **DynamicAttribute** will be applied here to the derived type. This is possible because a type can only have one base type.
+By the way, although you cannot implement dynamic interfaces, you can derive from generic types and specify one or more of the generic parameters to be **dynamic**. The **DynamicAttribute** will be applied here to the derived type. This is possible because a type can only have one base type.
 
 #### 11.6.4.3  dynamic is not Allowed in Type Parameter Constraints
 
-The third case where you cannot use the **dynamic** type is in generic parameter constraints. If you tried to compile the code below, the compiler will emit the following error: " **Constraint cannot be the dynamic type** ".
+The third case where you cannot use the **dynamic** type is in generic parameter constraints. If you tried to compile the code below, the compiler will emit the following error: "**Constraint cannot be the dynamic type**".
 
 ```
 public class Foo<T> where T : dynamic { }
 ```
 
-It does not make much sense to constrain a type parameter to be **dynamic** . If you want to accept only dynamic objects, you can constrain the type parameter to implement the **IDynamicMetaObjectProvider** interface.
+It does not make much sense to constrain a type parameter to be **dynamic**. If you want to accept only dynamic objects, you can constrain the type parameter to implement the **IDynamicMetaObjectProvider** interface.
 
 #### 11.6.4.4  Extension Methods for dynamic are not Allowed
 
-The last case where you cannot use the **dynamic** type is specifying it as the first parameter of an extension method. If you tried to compile the code below, the compiler will emit the following error: " **The first parameter of an extension method cannot be of type 'dynamic'** ".
+The last case where you cannot use the **dynamic** type is specifying it as the first parameter of an extension method. If you tried to compile the code below, the compiler will emit the following error: "**The first parameter of an extension method cannot be of type 'dynamic'**".
 
 ```
 public static void ExtendDynamic(this dynamic arg) { }
