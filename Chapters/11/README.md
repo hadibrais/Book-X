@@ -2379,3 +2379,4 @@ Just as with the previous case, it does not make much sense to extend the **dyna
 [2] Wu, Chaur. Pro DLR in .NET 4. Apress, 2011.  
 [3] Quiroga Álvarez, José. "Optimizing Runtime Performance of Dynamically Typed Code." (2016).  
 [4] Quiroga, Jose, and Francisco Ortin. "SSA transformations to facilitate type inference in dynamically typed code." The Computer Journal 60.9 (2017): 1300-1315.  
+[5] OffensiveDLR: https://github.com/byt3bl33d3r/OffensiveDLR.
